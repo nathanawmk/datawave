@@ -92,6 +92,7 @@ public abstract class RemoteHttpService {
                             request,
                             r -> {
                                 if (r.getStatusLine().getStatusCode() != 200) {
+                                    log.error("error on request: " + request.toString());
                                     throw new ClientProtocolException("Unable to " + errorSupplier.get() + ": " + r.getStatusLine() + " "
                                                     + EntityUtils.toString(r.getEntity()));
                                 } else {

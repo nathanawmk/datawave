@@ -43,8 +43,8 @@ import java.util.function.Supplier;
 @Priority(Interceptor.Priority.APPLICATION)
 public class RemoteQueryMetricService extends RemoteHttpService {
     
-    private static final String UPDATE_METRIC_SUFFIX = "updateMetric?metricType=COMPLETE";
-    private static final String UPDATE_METRICS_SUFFIX = "updateMetrics?metricType=COMPLETE";
+    private static final String UPDATE_METRIC_SUFFIX = "updateMetric";
+    private static final String UPDATE_METRICS_SUFFIX = "updateMetrics";
     private static final String ID_METRIC_SUFFIX = "id/%s";
     private static final String MAP_METRIC_SUFFIX = "id/map/%s";
     private static final String AUTH_HEADER_NAME = "Authorization";
@@ -132,7 +132,9 @@ public class RemoteQueryMetricService extends RemoteHttpService {
         // @formatter:off
         return executePostMethodWithRuntimeException(
                         suffix,
-                        uriBuilder -> {},
+                        uriBuilder -> {
+			    uriBuilder.addParameter("metricType", "COMPLETE");
+			},
                         httpPost -> {
                             httpPost.setEntity(postBody);
                             httpPost.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
