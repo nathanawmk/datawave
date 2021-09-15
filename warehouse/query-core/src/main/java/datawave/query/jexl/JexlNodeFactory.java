@@ -10,7 +10,6 @@ import datawave.query.jexl.lookups.IndexLookupMap;
 import datawave.query.jexl.lookups.ValueSet;
 import datawave.query.jexl.nodes.ExceededTermThresholdMarkerJexlNode;
 import datawave.query.jexl.nodes.ExceededValueThresholdMarkerJexlNode;
-import datawave.query.jexl.visitors.RebuildingVisitor;
 import datawave.webservice.query.exception.DatawaveErrorCode;
 import datawave.webservice.query.exception.QueryException;
 import org.apache.commons.jexl2.parser.ASTAdditiveNode;
@@ -46,6 +45,8 @@ import org.apache.commons.jexl2.parser.ASTReferenceExpression;
 import org.apache.commons.jexl2.parser.ASTStringLiteral;
 import org.apache.commons.jexl2.parser.ASTTrueNode;
 import org.apache.commons.jexl2.parser.JexlNode;
+import org.apache.commons.jexl2.parser.JexlNodeBuilder;
+import org.apache.commons.jexl2.parser.JexlNodeInstance;
 import org.apache.commons.jexl2.parser.JexlNodes;
 import org.apache.commons.jexl2.parser.ParserTreeConstants;
 
@@ -57,6 +58,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+
+import static org.apache.commons.jexl2.parser.JexlNodeBuilder.*;
+import static org.apache.commons.jexl2.parser.JexlNodeBuilder.ASTIdentifier;
+import static org.apache.commons.jexl2.parser.JexlNodeBuilder.ASTReference;
+import static org.apache.commons.jexl2.parser.JexlNodeBuilder.ASTStringLiteral;
 
 /**
  * Factory methods that can create JexlNodes
@@ -1729,5 +1735,21 @@ public class JexlNodeFactory {
         assignNode.jjtAddChild(literalNode, 1);
         
         return assignNode;
+    }
+    
+    /**
+     * Create an assignment node
+     *
+     * @param name
+     * @param value
+     * @return the assignment node
+     */
+    public static ASTAssignment createAssignmentAlternative(String name, String value) {
+        return ASTAssignment()
+                        .withChild(ASTReference()
+                                        .withChild(ASTIdentifier().withImage(name)))
+                        .withChild(ASTStringLiteral().withImage(value))
+                        .build();
+        
     }
 }
