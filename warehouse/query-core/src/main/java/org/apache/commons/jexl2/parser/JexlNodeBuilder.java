@@ -211,6 +211,10 @@ public class JexlNodeBuilder<T extends JexlNode> {
         return of(JexlNodeInstance.ASTReferenceExpression);
     }
     
+    public static JexlNodeBuilder<?> booleanEquivalent(boolean value) {
+        return value ? ASTTrueNode() : ASTFalseNode();
+    }
+    
     private JexlNodeBuilder(Supplier<T> constructor) {
         this.constructor = constructor;
     }
